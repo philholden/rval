@@ -9,16 +9,16 @@ route: /introduction/factories
 
 So far we only used stand-alone reactive values to capture our state.
 But in real world applications we will need complex objects or state trees.
-But suprisingly, RVal however doesn't offer a primitive to work with objects or array.
+But suprisingly, RVal doesn't offer a primitive to work with objects or arrays.
 Instead:
 
 _consider every object or array as an immutable collection of reactive values_
 
-By keeping objects and arrays themself immutable, it turns out that the mental model remains much simpler,
+By keeping objects and arrays themselves immutable, it turns out that the mental model remains much simpler,
 and the API surface that is needed to apply reactivity is much[^1] smaller.
 
-But, that doesn't RVal is awkward of inconvenient when working with objects.
-Instead, it turns out that using objects, which are structurally immutable, but contain stateful reactive values, are presently convenient to work with.
+But, that doesn't mean RVal is awkward or inconvenient when working with objects.
+Instead, it turns out that using objects, which are structurally immutable, but contain stateful reactive values, are pretty convenient to work with.
 
 Let's start a bit simple with an object that captures the state of a `Todo` item (with apologies for the uninspired example):
 
@@ -31,8 +31,8 @@ const myFirstTodo = {
   done,
 }
 
-title.done(true)
-console.log(title.done())
+myFirstTodo.done(true)
+console.log(myFirstTodo.done())
 ```
 
 Pretty straight forward eh? Note that we used only `const` values, and that `myFirstTodo` itself should be treated as an immutable objects to keep the conceptuel model simple.
@@ -40,7 +40,7 @@ Pretty straight forward eh? Note that we used only `const` values, and that `myF
 
 ## A first object factory
 
-Probably you don't want to create multiple todo's in your application, intead of one.
+Probably you don't want to create multiple todo's in your application, instead of one.
 To ease that process we can make a _factory_ funtion:
 
 ```javascript
@@ -58,7 +58,7 @@ myFirstTodo.done(true)
 ```
 
 Ok, that was easy! But our factory function can do more than just instating some reactive values and combining them into an object.
-We can add define derived data using `drv`, and actions using `act`, and make them part of the object as well:
+We can also define derived data using `drv`, and actions using `act`, and make them part of the object as well:
 
 ```javascript
 function createTodo(initialTitle) {
@@ -134,7 +134,7 @@ This way of organizing could be expressed as: using _immutable, but stateful obj
 
 So that is why in the above function `addTodo`, a completely new array is passed to `todos(x)` as new value, a value that is based on the current value of `todos()`.
 
-_Note: that this approach doesn't suffer too much needing to write complicated deep updates, because a deep update is just reads until you arrive at the location for the update. You don't have to produce an entire new state tree. For example this is a valid "deep update": `store.todos()[0].done(true)`_
+_Note: that this approach doesn't suffer too much needing to write complicated deep updates, because a deep update it just reads until you arrive at the location for the update. You don't have to produce an entire new state tree. For example this is a valid "deep update": `store.todos()[0].done(true)`_
 
 _Tip: The autofreeze behavior can be disabled for performance reasons, by using `configure({ autoFreeze: false })`._
 
@@ -152,7 +152,7 @@ done(!done()) // toggles to true
 
 To simply these kind of updates, it is also possible to pass a function as new value to a reactive value.
 This function receives as current argument the current value, and should return the new value to be stored.
-This function is called once, and it's output will be the name state.
+This function is called once, and it's output will be the next state.
 With that we can rewrite the above as:
 
 
@@ -246,7 +246,7 @@ But first we'll see how we can combine RVal with React, so that we can finally p
 
 You might be wondering whether it is possible to use classes instead of factory functions. 
 The answer is, yes that is perfectly possible. 
-The reason for the chose approach in this documentation however, is that it hopefully set's you up for the [Pit of Success](https://medium.com/@ricomariani/the-pit-of-success-cfefc6cb64c8). 
+The reason for the chosen approach in this documentation however, is that it hopefully set's you up for the [Pit of Success](https://medium.com/@ricomariani/the-pit-of-success-cfefc6cb64c8). 
 Once you get used to this approach, there should be less places where you can accidentally error, you can't forget to bind a function,
 and the mental model becomes really trivial: Nothing should or can't be modified. Except `val`s.
 
